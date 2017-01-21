@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace LibraryApp.Models
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
+        public int LoanLimit { get; set; }
+        public List<Loan> Loans { get; set; }
     }
 }

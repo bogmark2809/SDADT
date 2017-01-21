@@ -43,18 +43,35 @@ namespace LibraryApp.Controllers
             return View(model);
         }
 
-        // [HttpGet]
-        // public IActionResult Change()
-        // {
-        //     return View();
-        // }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public Task<IActionResult> Change()
-        // {
-        //     return View();
-        // }
+            var book = await _context.Books.SingleOrDefaultAsync(m => m.ID == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditConfirm(Book model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
 
         public async Task<IActionResult> Details(int? id)
         {

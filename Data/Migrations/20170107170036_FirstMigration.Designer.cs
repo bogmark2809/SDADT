@@ -8,15 +8,65 @@ using LibraryApp.Data;
 namespace LibraryApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170102121918_BookAdded")]
-    partial class BookAdded
+    [Migration("20170107170036_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("LibraryApp.Models.ApplicationUser", b =>
+            modelBuilder.Entity("LibraryApp.Models.Book", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Anotation");
+
+                    b.Property<string>("Author");
+
+                    b.Property<int>("Count");
+
+                    b.Property<string>("Genre");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<DateTime>("ReleaseDate");
+
+                    b.Property<string>("Title");
+
+                    b.Property<bool>("isAvailable");
+
+                    b.Property<bool>("isInStorage");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryApp.Models.Loan", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BookId");
+
+                    b.Property<DateTime>("LoanDate");
+
+                    b.Property<DateTime>("ReturnDate");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Loan");
+                });
+
+            modelBuilder.Entity("LibraryApp.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -30,6 +80,8 @@ namespace LibraryApp.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<int>("LoanLimit");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -64,36 +116,6 @@ namespace LibraryApp.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("LibraryApp.Models.Book", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Anotation");
-
-                    b.Property<string>("Author");
-
-                    b.Property<int>("Code");
-
-                    b.Property<int>("Count");
-
-                    b.Property<string>("Genre");
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<DateTime>("ReleaseDate");
-
-                    b.Property<string>("Title");
-
-                    b.Property<bool>("isAvailable");
-
-                    b.Property<bool>("isInStorage");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -203,6 +225,18 @@ namespace LibraryApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("LibraryApp.Models.Loan", b =>
+                {
+                    b.HasOne("LibraryApp.Models.Book", "Book")
+                        .WithMany("Loans")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LibraryApp.Models.User", "User")
+                        .WithMany("Loans")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -213,7 +247,7 @@ namespace LibraryApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LibraryApp.Models.ApplicationUser")
+                    b.HasOne("LibraryApp.Models.User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -221,7 +255,7 @@ namespace LibraryApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LibraryApp.Models.ApplicationUser")
+                    b.HasOne("LibraryApp.Models.User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -234,7 +268,7 @@ namespace LibraryApp.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("LibraryApp.Models.ApplicationUser")
+                    b.HasOne("LibraryApp.Models.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
