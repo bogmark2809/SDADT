@@ -30,11 +30,15 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Library</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="User" asp-action="Index">Users</a></li>
-                    <li><a asp-area="" asp-controller="Book" asp-action="Index">Books</a></li>
-                    <li><a asp-area="" asp-controller="Lean" asp-action="Index">Leans</a></li>
-                </ul>
+                @await Html.PartialAsync("_NavMenuPartial")
+                <form class="navbar-form navbar-left">
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control" laceholder="Search">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default">Search</button>
+                        </div>
+                    </div>
+                </form>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
