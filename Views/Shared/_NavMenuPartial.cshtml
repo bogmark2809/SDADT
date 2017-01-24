@@ -11,12 +11,12 @@
      {
         <li><a asp-area="" asp-controller="Account" asp-action="Index">Users</a></li>
         <li><a asp-area="" asp-controller="Role" asp-action="Index">Roles</a></li>
-        <li><a asp-area="" asp-controller="Lean" asp-action="Index">Leans</a></li>
+        <li><a asp-area="" asp-controller="Loan" asp-action="Index">Loans</a></li>
      }
      else if (User.IsInRole("Librarian"))
     {
         <li><a asp-area="" asp-controller="Account" asp-action="Index">Readers</a></li>
-        <li><a asp-area="" asp-controller="Lean" asp-action="Index">Leans</a></li>
+        <li><a asp-area="" asp-controller="Loan" asp-action="Index">Loans</a></li>
      }
     <li><a asp-area="" asp-controller="Book" asp-action="Index">Books</a></li>
 }

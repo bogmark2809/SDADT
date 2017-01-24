@@ -6,7 +6,7 @@ namespace LibraryApp.Models
 {
     public class Loan
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
@@ -18,5 +18,6 @@ namespace LibraryApp.Models
         public DateTime LoanDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime ReturnDate { get; set; }
+        public bool isReturned { get; set; }
     }
 }

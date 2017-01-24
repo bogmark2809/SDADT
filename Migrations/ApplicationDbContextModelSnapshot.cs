@@ -5,20 +5,19 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using LibraryApp.Data;
 
-namespace LibraryApp.Data.Migrations
+namespace LibraryApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170107170036_FirstMigration")]
-    partial class FirstMigration
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
             modelBuilder.Entity("LibraryApp.Models.Book", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Anotation");
@@ -39,14 +38,14 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<bool>("isInStorage");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Books");
                 });
 
             modelBuilder.Entity("LibraryApp.Models.Loan", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BookId");
@@ -57,13 +56,38 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("ID");
+                    b.Property<bool>("isReturned");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Loan");
+                    b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("LibraryApp.Models.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("LibraryApp.Models.User", b =>
@@ -87,6 +111,8 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
+                    b.Property<string>("Name");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
 
@@ -95,11 +121,17 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<string>("PersonalNumber");
+
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<int>("RFID");
+
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("Surname");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -116,29 +148,6 @@ namespace LibraryApp.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -239,7 +248,7 @@ namespace LibraryApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
+                    b.HasOne("LibraryApp.Models.Role")
                         .WithMany("Claims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -263,7 +272,7 @@ namespace LibraryApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
+                    b.HasOne("LibraryApp.Models.Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);

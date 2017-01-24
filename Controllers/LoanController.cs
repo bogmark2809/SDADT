@@ -4,24 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibraryApp.Data;
 using LibraryApp.Models;
+using LibraryApp.Models.LoanViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Controllers
 {
-    public class BookController : Controller
+    public class LoanController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public BookController(ApplicationDbContext context)
+        public LoanController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            var loans = _context.Loans.Include( w => w.User);
+            return View(await loans.Include(b => b.Book).ToListAsync());
         }
 
         [HttpGet]
@@ -32,11 +34,20 @@ namespace LibraryApp.Controllers
 
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateConfirm(Book model)
+        public async Task<IActionResult> CreateConfirm(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(model);
+                var user = await _context.Users.FirstAsync( b => b.RFID == model.RFID);
+                var book = await _context.Books.FirstAsync( b => b.Id == model.Code);
+                var loan = new Loan()
+                {
+                    Book = book,
+                    User= user,
+                    LoanDate = DateTime.Now,
+                    ReturnDate = model.ReturnDate
+                };
+                await _context.AddAsync(loan);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -51,18 +62,18 @@ namespace LibraryApp.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.SingleOrDefaultAsync(m => m.Id == id);
-            if (book == null)
+            var loan = await _context.Loans.SingleOrDefaultAsync(m => m.Id == id);
+            if (loan == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(loan);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditConfirm(Book model)
+        public async Task<IActionResult> EditConfirm(Loan model)
         {
             if (ModelState.IsValid)
             {
@@ -73,22 +84,6 @@ namespace LibraryApp.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Books.SingleOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            return View(book);
-        }
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -96,21 +91,21 @@ namespace LibraryApp.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.SingleOrDefaultAsync(m => m.Id == id);
-            if (book == null)
+            var loan = await _context.Loans.SingleOrDefaultAsync(m => m.Id == id);
+            if (loan == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(loan);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Books.Remove(book);
+            var loan = await _context.Loans.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Loans.Remove(loan);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

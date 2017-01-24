@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using LibraryApp.Data;
 
-namespace LibraryApp.Data.Migrations
+namespace LibraryApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170122161858_Roles_and_User")]
-    partial class Roles_and_User
+    [Migration("20170124200515_MainTables")]
+    partial class MainTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,7 +18,7 @@ namespace LibraryApp.Data.Migrations
 
             modelBuilder.Entity("LibraryApp.Models.Book", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Anotation");
@@ -39,14 +39,14 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<bool>("isInStorage");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Books");
                 });
 
             modelBuilder.Entity("LibraryApp.Models.Loan", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BookId");
@@ -57,13 +57,15 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("ID");
+                    b.Property<bool>("isReturned");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Loan");
+                    b.ToTable("Loans");
                 });
 
             modelBuilder.Entity("LibraryApp.Models.Role", b =>
@@ -120,12 +122,13 @@ namespace LibraryApp.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<string>("PersonalNumber");
+
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("RFID")
-                        .ValueGeneratedOnAddOrUpdate();
+                    b.Property<int>("RFID");
 
                     b.Property<string>("SecurityStamp");
 
