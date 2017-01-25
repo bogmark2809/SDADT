@@ -41,7 +41,7 @@ namespace LibraryApp
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -74,7 +74,7 @@ namespace LibraryApp
 
             app.UseIdentity();
 
-            //DbSeed.Seed(app);
+            DbSeed.Seed(app);
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
