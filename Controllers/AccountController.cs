@@ -114,6 +114,7 @@ namespace LibraryApp.Controllers
                         return RedirectToAction("Index");
                     }
                 }
+                ViewData["Roles"] = _context.Roles.ToList();
                 AddErrors(result);
             }
 
