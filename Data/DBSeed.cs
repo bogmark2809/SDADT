@@ -30,17 +30,17 @@ namespace LibraryApp.Data
                 {
                     Email = "Admin01@admin.com",
                     UserName = "Admin01@admin.com",
-                    Name = "Admin",
-                    Surname = "Admin",
-                    PersonalNumber = "000000-00000",
-                    RFID = 0
+                    Firstname = "Admin",
+                    Lastname = "Admin",
+                    PersonalNumber = 00000000000,
                 };
                 
                 
                 var result = await userManager.CreateAsync(admin,"Admin01@admin.com");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "Admin");
+                    var user = await userManager.FindByEmailAsync("Admin01@admin.com");
+                    await userManager.AddToRoleAsync(user, "Admin");
                 }
 
                 await context.SaveChangesAsync();

@@ -1,22 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryApp.Models
 {
     public class Book
     {
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
+        public int? Id { get; set; }
+        [MaxLength(55)]
+        [StringLength(50, MinimumLength = 5)]
         public string Title { get; set; }
+        [MaxLength(55)]
+        [StringLength(50, MinimumLength = 5)]
         public string Author { get; set; }
-        [DataType(DataType.MultilineText)]
+        [MaxLength(255)]
+        [StringLength(250)]
         public string Anotation { get; set; }
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReleaseDate { get; set; }
+        [MaxLength(25)]
+        [StringLength(20, MinimumLength = 5)]
         public string Genre { get; set; }
         [DataType(DataType.Currency)]        
         public decimal Price { get; set; }
-        public int Count { get; set; }
+        public int Quantity { get; set; }
         [Display(Name = "Available")]    
         public bool isAvailable { get; set; }
         [Display(Name = "In storage")]

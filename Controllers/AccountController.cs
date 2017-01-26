@@ -32,6 +32,7 @@ namespace LibraryApp.Controllers
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
@@ -96,6 +97,7 @@ namespace LibraryApp.Controllers
         // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -103,7 +105,7 @@ namespace LibraryApp.Controllers
             {
                 var lastId = _userManager.Users.ToList().Last().RFID;
                 var role = User.IsInRole("Admin") || User.IsInRole("Librarian") ? model.Role : "Reader";
-                var user = new User { UserName = model.Email, Email = model.Email , Name = model.Name, Surname = model.Surname, RFID = lastId + 1 };
+                var user = new User { UserName = model.Email, Email = model.Email , Firstname = model.Name, Lastname = model.Surname, RFID = lastId + 1 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

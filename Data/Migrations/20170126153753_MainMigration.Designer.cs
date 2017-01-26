@@ -8,32 +8,38 @@ using LibraryApp.Data;
 namespace LibraryApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170124200515_MainTables")]
-    partial class MainTables
+    [Migration("20170126153753_MainMigration")]
+    partial class MainMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("LibraryApp.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Anotation");
+                    b.Property<string>("Anotation")
+                        .HasMaxLength(250);
 
-                    b.Property<string>("Author");
+                    b.Property<string>("Author")
+                        .HasMaxLength(50);
 
-                    b.Property<int>("Count");
-
-                    b.Property<string>("Genre");
+                    b.Property<string>("Genre")
+                        .HasMaxLength(20);
 
                     b.Property<decimal>("Price");
 
+                    b.Property<int>("Quantity");
+
                     b.Property<DateTime>("ReleaseDate");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasMaxLength(50);
 
                     b.Property<bool>("isAvailable");
 
@@ -46,8 +52,9 @@ namespace LibraryApp.Migrations
 
             modelBuilder.Entity("LibraryApp.Models.Loan", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BookId");
 
@@ -55,7 +62,8 @@ namespace LibraryApp.Migrations
 
                     b.Property<DateTime>("ReturnDate");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.Property<bool>("isReturned");
 
@@ -106,13 +114,17 @@ namespace LibraryApp.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("Firstname")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Lastname")
+                        .HasMaxLength(50);
+
                     b.Property<int>("LoanLimit");
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -122,17 +134,17 @@ namespace LibraryApp.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PersonalNumber");
+                    b.Property<int>("PersonalNumber");
 
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("RFID");
+                    b.Property<int?>("RFID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<string>("Surname");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -244,7 +256,8 @@ namespace LibraryApp.Migrations
 
                     b.HasOne("LibraryApp.Models.User", "User")
                         .WithMany("Loans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

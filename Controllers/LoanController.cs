@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Controllers
 {
+    [Authorize(Roles = "Admin,Librarian")]
     public class LoanController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,6 +21,7 @@ namespace LibraryApp.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Index()
         {
             var loans = _context.Loans.Include( w => w.User);
@@ -27,12 +29,14 @@ namespace LibraryApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Librarian")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost, ActionName("Create")]
+        [Authorize(Roles = "Admin,Librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateConfirm(CreateViewModel model)
         {
@@ -55,6 +59,7 @@ namespace LibraryApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,6 +77,7 @@ namespace LibraryApp.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin,Librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditConfirm(Loan model)
         {
@@ -84,6 +90,8 @@ namespace LibraryApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -101,6 +109,7 @@ namespace LibraryApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Librarian")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

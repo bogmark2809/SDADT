@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Controllers
 {
+    [Authorize(Roles = "Admin,Librarian")]
     public class RoleController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,18 +23,21 @@ namespace LibraryApp.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _roleManager.Roles.ToListAsync());
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost, ActionName("Create")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateConfirm(Role model)
         {
@@ -51,6 +55,7 @@ namespace LibraryApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -69,6 +74,7 @@ namespace LibraryApp.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditConfirm(Role model)
         {
             if (ModelState.IsValid)
@@ -80,6 +86,8 @@ namespace LibraryApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -97,6 +105,7 @@ namespace LibraryApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
