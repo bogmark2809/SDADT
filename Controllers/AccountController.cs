@@ -66,7 +66,7 @@ namespace LibraryApp.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -105,7 +105,7 @@ namespace LibraryApp.Controllers
             {
                 var lastId = _userManager.Users.ToList().Last().RFID;
                 var role = User.IsInRole("Admin") || User.IsInRole("Librarian") ? model.Role : "Reader";
-                var user = new User { UserName = model.Email, Email = model.Email , Firstname = model.Name, Lastname = model.Surname, RFID = lastId + 1 };
+                var user = new User { UserName = string.Format("{0} {1}", model.Firstname, model.Lastname), Email = model.Email , Firstname = model.Firstname, Lastname = model.Lastname, RFID = lastId + 1 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

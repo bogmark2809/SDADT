@@ -10,13 +10,13 @@ namespace LibraryApp.Models.AccountViewModels
     {
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Name")]
-        public string Name { get; set; }
+        [Display(Name = "Firstname")]
+        public string Firstname { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Surname")]
-        public string Surname { get; set; }
+        [Display(Name = "Lastname")]
+        public string Lastname { get; set; }
 
         [Required]
         [EmailAddress]

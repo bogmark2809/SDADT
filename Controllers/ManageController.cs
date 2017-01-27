@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LibraryApp.Models;
 using LibraryApp.Models.ManageViewModels;
-using LibraryApp.Services;
-
 namespace LibraryApp.Controllers
 {
     [Authorize]
