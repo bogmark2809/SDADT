@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LibraryApp.Models;
 using LibraryApp.Models.ManageViewModels;
+using LibraryApp.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 namespace LibraryApp.Controllers
 {
     [Authorize]
@@ -15,13 +16,16 @@ namespace LibraryApp.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger _logger;
 
         public ManageController(
+            ApplicationDbContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILoggerFactory loggerFactory)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<ManageController>();
@@ -45,8 +49,16 @@ namespace LibraryApp.Controllers
             }
             var model = new IndexViewModel
             {
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                RFID = user.RFID,
+                Email = user.Email,
+                LoanLimit = user.LoanLimit,
+                PersonalNumber = user.PersonalNumber,
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
+                Role = (await _userManager.GetRolesAsync(user))[0],
+                Loans = await _context.Loans.Where( l => l.UserId == user.Id).ToListAsync(),
             };
             return View(model);
         }

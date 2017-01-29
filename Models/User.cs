@@ -7,7 +7,7 @@ namespace LibraryApp.Models
 {
     public class User : IdentityUser
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public int? RFID { get; set; }
         [MaxLength(55)]
@@ -17,8 +17,9 @@ namespace LibraryApp.Models
         [StringLength(50, MinimumLength = 3)]
         public string Lastname { get; set; }
         public int LoanLimit { get; set; }
-        [DisplayFormat(DataFormatString = "{000000-00000}", ApplyFormatInEditMode = true)]
-        public int PersonalNumber { get; set; }
-        public List<Loan> Loans { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [StringLength(12, MinimumLength = 12)]
+        public string PersonalNumber { get; set; }
+        public ICollection<Loan> Loans { get; set; }
     }
 }

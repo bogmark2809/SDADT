@@ -7,7 +7,6 @@ using LibraryApp.Models;
 using LibraryApp.Models.AccountViewModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using LibraryApp.Data;
 
 namespace LibraryApp.Controllers
@@ -103,9 +102,11 @@ namespace LibraryApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var lastId = _userManager.Users.ToList().Last().RFID;
+                var lastId = await _userManager.Users.LastOrDefaultAsync();
                 var role = User.IsInRole("Admin") || User.IsInRole("Librarian") ? model.Role : "Reader";
-                var user = new User { UserName = string.Format("{0} {1}", model.Firstname, model.Lastname), Email = model.Email , Firstname = model.Firstname, Lastname = model.Lastname, RFID = lastId + 1 };
+                var user = new User { UserName = model.Email, Email = model.Email ,
+                                        Firstname = model.Firstname, Lastname = model.Lastname, LoanLimit = model.LoanLimit,
+                                        PersonalNumber = model.PersonalNumber, RFID = lastId.RFID + 1 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -115,13 +116,122 @@ namespace LibraryApp.Controllers
                         _logger.LogInformation(3, "User created a new account with password.");
                         return RedirectToAction("Index");
                     }
+                    AddErrors(roleResult);
                 }
-                ViewData["Roles"] = _context.Roles.ToList();
                 AddErrors(result);
             }
-
-            // If we got this far, something failed, redisplay form
+            ViewData["Roles"] = _context.Roles.ToList();
             return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            EditViewModel regModel = new EditViewModel() 
+            {
+                Id = user.Id,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Email = user.Email,
+                PersonalNumber = user.PersonalNumber,
+                LoanLimit = user.LoanLimit,
+            };
+            ViewData["Roles"] = _context.Roles.ToList();
+            return View(regModel);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> EditConfirm(EditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var role = User.IsInRole("Admin") || User.IsInRole("Librarian") ? model.Role : "Reader";
+                var user = await _userManager.FindByIdAsync(model.Id);
+                user.Firstname = user.Firstname;
+                user.Lastname = user.Lastname;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.LoanLimit = model.LoanLimit;
+                user.PersonalNumber = model.PersonalNumber;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    var roleResult = await _userManager.RemoveFromRolesAsync(user,  await _userManager.GetRolesAsync(user));
+
+                    if (roleResult.Succeeded)
+                    {
+                        roleResult = await _userManager.AddToRoleAsync(user, role);
+                        if (roleResult.Succeeded)
+                        {
+                            _logger.LogInformation(3, "User created a new account with password.");
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    AddErrors(roleResult);
+                }
+                AddErrors(result);
+            }
+            ViewData["Roles"] = _context.Roles.ToList();
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Librarian")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(m => m.Id == id);
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin,Librarian")]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["Role"] = (await _userManager.GetRolesAsync(user)).First();
+            user.Loans = await _context.Loans.Where( l => l.UserId == user.Id).ToListAsync();
+            return View(user);
         }
 
         //

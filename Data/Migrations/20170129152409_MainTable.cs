@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace LibraryApp.Migrations
 {
-    public partial class MainMigration : Migration
+    public partial class MainTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,11 +61,10 @@ namespace LibraryApp.Migrations
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
-                    PersonalNumber = table.Column<int>(nullable: false),
+                    PersonalNumber = table.Column<string>(maxLength: 12, nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    RFID = table.Column<int>(nullable: true)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RFID = table.Column<int>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)

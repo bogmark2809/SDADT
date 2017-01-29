@@ -32,6 +32,6 @@ namespace LibraryApp.Models
         public bool isAvailable { get; set; }
         [Display(Name = "In storage")]
         public bool isInStorage { get; set; }
-        public List<Loan> Loans { get; set; }
+        public ICollection<Loan> Loans { get; set; }
     }
 }

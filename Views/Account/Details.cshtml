@@ -1,0 +1,64 @@
+@model User
+@{
+    ViewData["Title"] = "Manage your account";
+}
+
+<h2>@ViewData["Title"].</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+
+<div class="container">
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="https://randomuser.me/api/portraits/lego/5.jpg" alt="40%x80" class="img-rounded">
+            <div class="caption" class"text-center">
+                <h3 class"text-center">@Html.DisplayFor(modelItem => Model.Firstname) @Html.DisplayFor(modelItem => Model.Lastname)</h3>
+                <p class"text-center">Role:@ViewData["Role"]</p>
+                <p class"text-center">@Html.DisplayNameFor(modelItem => Model.RFID):@Html.DisplayFor(modelItem => Model.RFID)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <h4>Details</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(modelItem => Model.Email):</dt><dd>@Html.DisplayFor(modelItem => Model.Email)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.PersonalNumber):</dt><dd>@Html.DisplayFor(modelItem => Model.PersonalNumber)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.LoanLimit):</dt><dd>@Html.DisplayFor(modelItem => Model.LoanLimit)</dd>
+            <dt>Loans:</dt><dd>@Html.DisplayFor(modelItem => Model.Loans.Count)</dd>
+        </dl>
+    </div>
+    
+    <div class="col-sm-6 col-md-4">
+        @if (Model.Loans != null && Model.Loans.Count > 0)
+        {
+            <h4>Loans</h4>
+            <hr />
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Loans.First().Book.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Loans.First().ReturnDate)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Loans) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Book.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReturnDate)
+                        </td>
+                    </tr>
+                    }                    
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+

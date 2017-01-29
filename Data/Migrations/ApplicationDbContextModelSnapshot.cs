@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using LibraryApp.Data;
 
 namespace LibraryApp.Migrations
@@ -133,15 +132,14 @@ namespace LibraryApp.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<int>("PersonalNumber");
+                    b.Property<string>("PersonalNumber")
+                        .HasMaxLength(12);
 
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int?>("RFID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int?>("RFID");
 
                     b.Property<string>("SecurityStamp");
 

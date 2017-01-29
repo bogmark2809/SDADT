@@ -1,13 +1,13 @@
 @model IEnumerable<Loan>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Loans";
 }
 
-<h2>Index</h2>
+<h2>Loans</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @await Html.PartialAsync("_CreateBtnPartial", "Loan")
 </p>
 <table class="table">
     <thead>
@@ -33,17 +33,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.isReturned)
             </th>
-            <th></th>
+            <th>Controls</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.RFID)
+                <a asp-controller="Account" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.RFID)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Firstname)
+                <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.User.Firstname)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookId)
@@ -61,7 +61,7 @@
                 @Html.DisplayFor(modelItem => item.isReturned)
             </td>
             <td>
-                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Loan","@item.Id"})
+                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Loan",@item.Id.ToString()})
             </td>
         </tr>
 }

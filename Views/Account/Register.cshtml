@@ -30,6 +30,20 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
+    <div class="form-group">
+        <label asp-for="PersonalNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PersonalNumber" class="form-control" />
+            <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LoanLimit" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="LoanLimit" class="form-control" />
+            <span asp-validation-for="LoanLimit" class="text-danger"></span>
+        </div>
+    </div>
     @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
     {
         <div class="form-group">

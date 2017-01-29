@@ -2,7 +2,6 @@ using System.Linq;
 using LibraryApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LibraryApp.Data
@@ -32,15 +31,15 @@ namespace LibraryApp.Data
                     UserName = "Admin01@admin.com",
                     Firstname = "Admin",
                     Lastname = "Admin",
-                    PersonalNumber = 00000000000,
+                    PersonalNumber = "000000-00000",
+                    RFID = 0
                 };
                 
                 
                 var result = await userManager.CreateAsync(admin,"Admin01@admin.com");
                 if (result.Succeeded)
                 {
-                    var user = await userManager.FindByEmailAsync("Admin01@admin.com");
-                    await userManager.AddToRoleAsync(user, "Admin");
+                    await userManager.AddToRoleAsync(admin, "Admin");
                 }
 
                 await context.SaveChangesAsync();

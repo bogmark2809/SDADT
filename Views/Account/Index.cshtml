@@ -1,13 +1,13 @@
 @model IEnumerable<User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
 
-<h2>Index</h2>
+<h2>Users</h2>
 
 <p>
-    <a asp-action="Register">Create New</a>
+    @await Html.PartialAsync("_CreateBtnPartial", "Account")
 </p>
 <table class="table">
     <thead>
@@ -21,7 +21,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Lastname)
             </th>
-            <th></th>
+            <th>Controls</th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Lastname)
             </td>
             <td>
-                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Account","@item.Id"})
+                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Account",@item.Id})
             </td>
         </tr>
 }

@@ -10,10 +10,12 @@ namespace LibraryApp.Models
         [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public int? Id { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public int BookId { get; set; }
         [ForeignKey("BookId")]
         public Book Book { get; set;}

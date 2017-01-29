@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LibraryApp.Models.LoanViewModels
 {
@@ -10,15 +7,20 @@ namespace LibraryApp.Models.LoanViewModels
     {
         [Required]
         [Display(Name = "RFID")]
+        [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public int RFID { get; set; }
 
         [Required]
         [Display(Name = "Book Code")]
+        [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
         public int Code { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Return Date")]
         public DateTime ReturnDate { get; set; }
+
+        [Display(Name = "Is Returned")]
+        public bool isReturned { get; set; }
     }
 }

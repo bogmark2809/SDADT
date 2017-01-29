@@ -1,0 +1,12 @@
+@using Microsoft.AspNetCore.Identity
+@using LibraryApp.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@model string
+
+@if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Librarian")))
+{
+    <a class="btn btn-default" role="button" asp-controller="@Model" asp-action="Create">Create new</a>
+}

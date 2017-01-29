@@ -1,0 +1,25 @@
+@using LibraryApp.Models.HomeViewModels
+@model SearchViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+@if (Model.isForBookList && Model.Book != null)
+{
+    @Html.Partial("../Book/Index.cshtml", Model.Book)
+}
+else
+{
+    <h2>Search</h2>
+
+    <div class="container">
+        <div>
+            <h3>Book</h3>
+        </div>
+        <div>
+            <h3>User</h3>
+        </div>
+    </div>
+}
+

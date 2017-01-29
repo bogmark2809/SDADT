@@ -8,11 +8,15 @@
 
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Librarian")))
 {
-    <a asp-controller="Model[0]" asp-action="Edit" asp-route-id="Model[1]">Edit</a> 
-    <a asp-controller="Model[0]" asp-action="Delete" asp-route-id="Model[1]">Delete</a>
-    <a asp-controller="Model[0]" asp-action="Details" asp-route-id="Model[1]">Details</a>  
+    <div class="btn-group btn-group-justified" role="group" aria-label="controlBtn" style="width: 200px">
+        @if (@Model[0] != "Role" && @Model[0] != "Loan") {
+        <a class="btn btn-default" role="button" asp-controller="@Model[0]" asp-action="Details" asp-route-id="@Model[1]">Details</a>  
+        }
+        <a class="btn btn-warning" role="button" asp-controller="@Model[0]" asp-action="Edit" asp-route-id="@Model[1]">Edit</a> 
+        <a class="btn btn-danger" role="button" asp-controller="@Model[0]" asp-action="Delete" asp-route-id="@Model[1]">Delete</a>
+    </div>
 }
 else
 {
-     <a asp-controller="Model[0]" asp-action="Details" asp-route-id="Model[1]">Details</a>
+     <a class="btn btn-default" role="button" asp-controller="@Model[0]" asp-action="Details" asp-route-id="@Model[1]">Details</a>
 }

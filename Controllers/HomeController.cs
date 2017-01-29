@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryApp.Data;
 using LibraryApp.Models;
 using LibraryApp.Models.HomeViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +30,7 @@ namespace LibraryApp.Controllers
             if (HttpContext.User != null && HttpContext.User.Identity.IsAuthenticated)
             {
                 var result = await _userManager.GetUserAsync(HttpContext.User);
-                loans = result.Loans;
+                loans = await _context.Loans.Where( l => l.UserId == result.Id).Take(4).ToListAsync();
             }
 
             var indexModel = new IndexViewModel()
@@ -43,15 +41,33 @@ namespace LibraryApp.Controllers
             return View(indexModel);
         }
 
-        public async Task<IActionResult> Search(int SearchId)
+        public async Task<IActionResult> Search(string SearchString)
         {
-            var user = await _userManager.Users.FirstAsync( b => b.RFID == SearchId);
-            var searchView = new SearchViewModel()
+            if (SearchString.Length == 10)
             {
-                Book = await _context.Books.FirstAsync( b => b.Id == SearchId),
-                User = await _userManager.Users.FirstAsync( b => b.RFID == SearchId)
+                SearchString = SearchString.Replace("0","");
+                int id;
+                if (int.TryParse(SearchString, out id))
+                {
+                    var searchView = new SearchViewModel()
+                    {
+                        Book = new List<Book>() { await _context.Books.FirstOrDefaultAsync( b => b.Id == id) },
+                        User = await _userManager.Users.FirstOrDefaultAsync( b => b.RFID == id),
+                        isForBookList = false
+                    };
+                    return View(searchView);
+                }
+            }
+
+            var searchViewBook = new SearchViewModel()
+            {
+                Book = await _context.Books.Where( b => (b.Title.Contains(SearchString) 
+                                            || b.Anotation.Contains(SearchString) || b.Genre.Contains(SearchString)
+                                            || b.Author.Contains(SearchString))).ToListAsync(),
+                isForBookList = true
             };
-            return View(searchView);
+            return View(searchViewBook);
+
         }
 
         public IActionResult Error()

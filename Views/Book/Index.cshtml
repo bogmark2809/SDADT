@@ -1,13 +1,13 @@
 @model IEnumerable<Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
-<h2>Index</h2>
+<h2>Books</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @await Html.PartialAsync("_CreateBtnPartial", "Book")
 </p>
 <table class="table">
     <thead>
@@ -42,7 +42,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.isInStorage)
             </th>
-            <th></th>
+            <th>Controls</th>
         </tr>
     </thead>
     <tbody>
@@ -79,7 +79,7 @@
                 @Html.DisplayFor(modelItem => item.isInStorage)
             </td>
             <td>
-                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Book","@item.Id"})
+                @await Html.PartialAsync("_ModelControlBtnPartial", new string[] { "Book",@item.Id.ToString()})
             </td>
         </tr>
 }

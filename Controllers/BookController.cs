@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using LibraryApp.Data;
 using LibraryApp.Models;
@@ -76,7 +73,6 @@ namespace LibraryApp.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

@@ -8,8 +8,8 @@ using LibraryApp.Data;
 namespace LibraryApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170126153753_MainMigration")]
-    partial class MainMigration
+    [Migration("20170129152409_MainTable")]
+    partial class MainTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,15 +134,14 @@ namespace LibraryApp.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<int>("PersonalNumber");
+                    b.Property<string>("PersonalNumber")
+                        .HasMaxLength(12);
 
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int?>("RFID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int?>("RFID");
 
                     b.Property<string>("SecurityStamp");
 

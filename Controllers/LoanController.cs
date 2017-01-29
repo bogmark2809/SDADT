@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using LibraryApp.Data;
 using LibraryApp.Models;
@@ -79,11 +77,16 @@ namespace LibraryApp.Controllers
         [HttpPost, ActionName("Edit")]
         [Authorize(Roles = "Admin,Librarian")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditConfirm(Loan model)
+        public async Task<IActionResult> EditConfirm(CreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(model);
+                var loan = new Loan()
+                {
+                    ReturnDate = model.ReturnDate,
+                    isReturned = model.isReturned
+                };
+                _context.Update(loan);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
