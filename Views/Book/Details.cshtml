@@ -1,96 +1,65 @@
-@model Book 
-@{ ViewData["Title"] = "Details"; }
+@model Book
+@{
+    ViewData["Title"] = "Book overview";
+}
 
-<h2>Details</h2>
+<h2>@ViewData["Title"].</h2>
 
 <div class="container">
-<div class="col-md-4">
-    <h4>Book</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Id)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Id)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Title)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Title)
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="https://unsplash.it/330/250/?image=@(Model.Id*200)" alt="100%x200" class="img-rounded">
+            <div class="caption" class"text-center">
+                <h3 class"text-center">@Html.DisplayFor(modelItem => Model.Title)</h3>
+                <p class"text-center">@Html.DisplayFor(modelItem => Model.Anotation)</p>
+                <p class"text-center">@Html.DisplayNameFor(modelItem => Model.Id):@Html.DisplayFor(modelItem => Model.Id)</p>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Author)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Author)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.ReleaseDate)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Genre)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Genre)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Price)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Price)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.Quantity)</strong>
-        </div>
-        <div class="col-md-8">
-            @Html.DisplayFor(model => model.Quantity)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.isAvailable)</strong>
-        </div>
-        <div class="col-md-1">
-            @Html.DisplayFor(model => model.isAvailable)
-        </div>
-        <div class="col-md-4">
-            <strong>@Html.DisplayNameFor(model => model.isInStorage)</strong>
-        </div>
-        <div class="col-md-1">
-            @Html.DisplayFor(model => model.isInStorage)
-        </div>
-    </div>
-</div>
 
-<div class="col-md-4">
-    <h4>Anotation</h4>
-    <hr />
-    @Html.DisplayFor(model => model.Anotation)
-</div>
-
-<div class="col-md-4">
-    <h4>Loans</h4>
-    <hr />
-    @Html.DisplayFor(model => model.Anotation)
-</div>
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-sm-6 col-md-4">
+        <h4>Details</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(modelItem => Model.Author):</dt><dd>@Html.DisplayFor(modelItem => Model.Author)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.Genre):</dt><dd>@Html.DisplayFor(modelItem => Model.Genre)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.Quantity):</dt><dd>@(Model.Quantity - Model.Loans.Count)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.Price):</dt><dd>@Html.DisplayFor(modelItem => Model.Price)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.ReleaseDate):</dt><dd>@Html.DisplayFor(modelItem => Model.ReleaseDate)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.isAvailable):</dt><dd>@Html.DisplayFor(modelItem => Model.isAvailable)</dd>
+            <dt>@Html.DisplayNameFor(modelItem => Model.isInStorage):</dt><dd>@Html.DisplayFor(modelItem => Model.isInStorage)</dd>
+        </dl>
+    </div>
+    
+    <div class="col-sm-6 col-md-4">
+        @if (Model.Loans != null && Model.Loans.Count > 0)
+        {
+            <h4>Loans</h4>
+            <hr />
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Loans.First().User.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Loans.First().ReturnDate)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Loans) {
+                    <tr>
+                        <td>
+                            <a asp-controller="Account" asp-action="Details" asp-route-id="@item.User.Id">@Html.DisplayFor(modelItem => item.User.Email)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReturnDate)
+                        </td>
+                    </tr>
+                    }                    
+                </tbody>
+            </table>
+        }
+    </div>
 </div>

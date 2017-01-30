@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using LibraryApp.Data;
 using LibraryApp.Models;
@@ -85,7 +86,7 @@ namespace LibraryApp.Controllers
             {
                 return NotFound();
             }
-
+            book.Loans = await _context.Loans.Where( l => l.BookId == id).Include(l => l.User).ToListAsync();
             return View(book);
         }
 

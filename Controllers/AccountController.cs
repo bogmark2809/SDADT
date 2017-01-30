@@ -102,21 +102,23 @@ namespace LibraryApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var lastId = await _userManager.Users.LastOrDefaultAsync();
-                var role = User.IsInRole("Admin") || User.IsInRole("Librarian") ? model.Role : "Reader";
+                var lastRFID = (await _userManager.Users.LastOrDefaultAsync()).RFID.GetValueOrDefault();
+                lastRFID = lastRFID + 1;
+                var role = User.IsInRole("Admin") ? model.Role : "Reader";
                 var user = new User { UserName = model.Email, Email = model.Email ,
                                         Firstname = model.Firstname, Lastname = model.Lastname, LoanLimit = model.LoanLimit,
-                                        PersonalNumber = model.PersonalNumber, RFID = lastId.RFID + 1 };
+                                        PersonalNumber = model.PersonalNumber, RFID = lastRFID };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(user, role);
-                    if (roleResult.Succeeded)
+                    result = await _userManager.AddToRoleAsync(user, role);
+                    if (result.Succeeded)
                     {
-                        _logger.LogInformation(3, "User created a new account with password.");
+                        _logger.LogInformation(3, "Created a new account with password.");
                         return RedirectToAction("Index");
                     }
-                    AddErrors(roleResult);
+                    else
+                        await _userManager.RemoveFromRoleAsync(user, role);
                 }
                 AddErrors(result);
             }
@@ -230,7 +232,7 @@ namespace LibraryApp.Controllers
                 return NotFound();
             }
             ViewData["Role"] = (await _userManager.GetRolesAsync(user)).First();
-            user.Loans = await _context.Loans.Where( l => l.UserId == user.Id).ToListAsync();
+            user.Loans = await _context.Loans.Where( l => l.UserId == user.Id).Include(b => b.Book).ToListAsync();
             return View(user);
         }
 

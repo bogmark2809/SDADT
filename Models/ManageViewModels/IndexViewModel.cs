@@ -11,7 +11,9 @@ namespace LibraryApp.Models.ManageViewModels
         public int? RFID { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        [Display(Name = "Loan limit")]
         public int LoanLimit { get; set; }
+        [Display(Name = "Personal number")]
         public string PersonalNumber { get; set; }
         public string Role { get; set; }
         public ICollection<Loan> Loans { get; set; }

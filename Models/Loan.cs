@@ -16,6 +16,7 @@ namespace LibraryApp.Models
         public User User { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Book Code")]
         public int BookId { get; set; }
         [ForeignKey("BookId")]
         public Book Book { get; set;}
@@ -24,7 +25,9 @@ namespace LibraryApp.Models
         public DateTime LoanDate { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Return Date")]
         public DateTime ReturnDate { get; set; }
+        [Display(Name = "Is returned?")]
         public bool isReturned { get; set; }
     }
 }

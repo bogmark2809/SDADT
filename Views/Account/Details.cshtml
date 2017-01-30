@@ -49,7 +49,7 @@
                     @foreach (var item in Model.Loans) {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Book.Title)
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.Book.Title)</a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ReturnDate)

@@ -43,10 +43,10 @@
                 <a asp-controller="Account" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.RFID)</a>
             </td>
             <td>
-                <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.User.Firstname)</a>
+                @Html.DisplayFor(modelItem => item.User.Firstname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookId)
+                <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.BookId)</a>   
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Book.Title)

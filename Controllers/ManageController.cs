@@ -58,7 +58,7 @@ namespace LibraryApp.Controllers
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
                 Role = (await _userManager.GetRolesAsync(user))[0],
-                Loans = await _context.Loans.Where( l => l.UserId == user.Id).ToListAsync(),
+                Loans = await _context.Loans.Where( l => l.UserId == user.Id).Include( b => b.Book).ToListAsync(),
             };
             return View(model);
         }

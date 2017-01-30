@@ -5,8 +5,10 @@
 @inject UserManager<User> UserManager
 
 @model string
-
+@{
+    string actionStr = @Model == "Account" ? "Register" : "Create";
+}
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Librarian")))
 {
-    <a class="btn btn-default" role="button" asp-controller="@Model" asp-action="Create">Create new</a>
+    <a class="btn btn-default" role="button" asp-controller="@Model" asp-action="@actionStr">Create new</a>
 }

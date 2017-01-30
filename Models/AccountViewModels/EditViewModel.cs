@@ -30,6 +30,7 @@ namespace LibraryApp.Models.AccountViewModels
 
         [Required]
         [StringLength(12, MinimumLength = 12)]
+        [Display(Name = "Personal number")]
         public string PersonalNumber { get; set; }
 
         public int LoanLimit { get; set; }

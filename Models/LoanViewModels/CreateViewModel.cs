@@ -17,10 +17,10 @@ namespace LibraryApp.Models.LoanViewModels
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Return Date")]
+        [Display(Name = "Return date")]
         public DateTime ReturnDate { get; set; }
 
-        [Display(Name = "Is Returned")]
+        [Display(Name = "Is returned?")]
         public bool isReturned { get; set; }
     }
 }

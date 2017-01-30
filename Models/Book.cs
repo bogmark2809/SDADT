@@ -9,6 +9,7 @@ namespace LibraryApp.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [DisplayFormat(DataFormatString = "{0:0000000000}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Book code")]
         public int? Id { get; set; }
         [MaxLength(55)]
         [StringLength(50, MinimumLength = 5)]
@@ -21,6 +22,7 @@ namespace LibraryApp.Models
         public string Anotation { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Publish date")]
         public DateTime ReleaseDate { get; set; }
         [MaxLength(25)]
         [StringLength(20, MinimumLength = 5)]
