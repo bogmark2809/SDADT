@@ -3,9 +3,10 @@
 
 @{
     ViewData["Title"] = "Search";
+    ViewData["showLoans"] = false;
 }
 
-@if (Model.isForBookList && Model.Book != null)
+@if (Model.isForBookList)
 {
     @Html.Partial("../Book/Index.cshtml", Model.Book)
 }
@@ -14,11 +15,43 @@ else
     <h2>Search</h2>
 
     <div class="container">
-        <div>
+        <div class="col-sm-12 col-md-6">
             <h3>Book</h3>
+            <hr/>
+            @if (Model.Book.Count > 0)
+            {
+                <div class="thumbnail">
+                    <img src="https://unsplash.it/330/250/?image=@(Model.Book.First().Id*200)" alt="100%x200" class="img-rounded">
+                    <div class="caption" class"text-center">
+                        <h3 class"text-center">@Html.DisplayFor(modelItem => Model.Book.First().Title)</h3>
+                        <p class"text-center">@Html.DisplayFor(modelItem => Model.Book.First().Anotation)</p>
+                        <p class"text-center">@Html.DisplayNameFor(modelItem => Model.Book.First().Id):@Html.DisplayFor(modelItem => Model.Book.First().Id)</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h2>Book not found!</h2>
+            }
         </div>
-        <div>
+        <div class="col-sm-12 col-md-6">
             <h3>User</h3>
+            <hr/>
+            @if (Model.User != null)
+            {
+                <div class="thumbnail">
+                    <img src="https://randomuser.me/api/portraits/lego/5.jpg" alt="40%x80" class="img-rounded">
+                    <div class="caption" class"text-center">
+                        <h3 class"text-center">@Html.DisplayFor(modelItem => Model.User.Firstname) @Html.DisplayFor(modelItem => Model.User.Lastname)</h3>
+                        <p class"text-center">Role:ViewData["Role"]</p>
+                        <p class"text-center">@Html.DisplayNameFor(modelItem => Model.User.RFID):@Html.DisplayFor(modelItem => Model.User.RFID)</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h2>User not found!</h2>
+            }
         </div>
     </div>
 }

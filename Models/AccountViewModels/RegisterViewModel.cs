@@ -19,7 +19,6 @@ namespace LibraryApp.Models.AccountViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
         [Display(Name = "Role")]
         public string Role { get; set; }
 

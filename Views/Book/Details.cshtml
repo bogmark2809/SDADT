@@ -32,7 +32,7 @@
     </div>
     
     <div class="col-sm-6 col-md-4">
-        @if (Model.Loans != null && Model.Loans.Count > 0)
+        @if ((bool)ViewData["showLoans"] && Model.Loans != null && Model.Loans.Count > 0)
         {
             <h4>Loans</h4>
             <hr />

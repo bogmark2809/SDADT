@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.User.RFID)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.Firstname)
+                @Html.DisplayNameFor(model => model.User.Email)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BookId)
@@ -43,7 +43,7 @@
                 <a asp-controller="Account" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.RFID)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Firstname)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
                 <a asp-controller="Book" asp-action="Details" asp-route-id="@item.BookId">@Html.DisplayFor(modelItem => item.BookId)</a>   

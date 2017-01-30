@@ -87,11 +87,11 @@ namespace LibraryApp.Controllers
                 return NotFound();
             }
             book.Loans = await _context.Loans.Where( l => l.BookId == id).Include(l => l.User).ToListAsync();
+            ViewData["showLoans"] = (User.IsInRole("Admin") || User.IsInRole("Librarian"));
             return View(book);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         [Authorize(Roles = "Admin,Librarian")]
         public async Task<IActionResult> Delete(int? id)
         {

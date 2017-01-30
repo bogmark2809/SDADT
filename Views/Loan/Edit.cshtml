@@ -1,5 +1,4 @@
-@using LibraryApp.Models.LoanViewModels
-@model CreateViewModel
+@model LibraryApp.Models.LoanViewModels.EditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,8 +11,6 @@
         <h4>Loan</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <!--<input type="hidden" asp-for="RFID" />-->
-        <!--<input type="hidden" asp-for="Code" />-->
         <div class="form-group">
             <label asp-for="ReturnDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">

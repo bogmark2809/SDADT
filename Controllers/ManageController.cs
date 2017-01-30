@@ -97,6 +97,45 @@ namespace LibraryApp.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        [HttpGet]
+        public IActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/ChangeEmail
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                var result = await _userManager.SetUserNameAsync(user, model.NewEmail);
+                if (result.Succeeded)
+                {
+                    result = await _userManager.SetEmailAsync(user, model.NewEmail);
+                    if (result.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation(3, "User changed their password successfully.");
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                        await _userManager.SetUserNameAsync(user, model.OldEmail);
+
+                }
+                AddErrors(result);
+                return View(model);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         //
         // GET: /Manage/SetPassword
         [HttpGet]

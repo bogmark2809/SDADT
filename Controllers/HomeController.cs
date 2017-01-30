@@ -47,14 +47,15 @@ namespace LibraryApp.Controllers
             {
                 SearchString = SearchString.Replace("0","");
                 int id;
-                if (int.TryParse(SearchString, out id))
+                if (int.TryParse(SearchString, out id) && (User.IsInRole("Admin") || User.IsInRole("Librarian")))
                 {
                     var searchView = new SearchViewModel()
                     {
                         Book = new List<Book>() { await _context.Books.FirstOrDefaultAsync( b => b.Id == id) },
-                        User = await _userManager.Users.FirstOrDefaultAsync( b => b.RFID == id),
+                        User = await _context.Users.Include( u => u.Roles).FirstOrDefaultAsync( b => b.RFID == id),
                         isForBookList = false
                     };
+                    ViewData["Role"] = (await _userManager.GetRolesAsync(searchView.User)).FirstOrDefault();
                     return View(searchView);
                 }
             }
